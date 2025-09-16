@@ -8,6 +8,8 @@ var usersRouter = require('./routes/users');
 // 后台路由文件
 var adminArticlesRouter = require('./routes/admin/articles');
 var adminCategoriesRouter = require('./routes/admin/categories');
+var adminSettingsRouter = require('./routes/admin/seetings');
+var adminUsersRouter = require('./routes/admin/users');
 
 var app = express();
 
@@ -22,5 +24,7 @@ app.use('/users', usersRouter);
 // 后台路由配置
 app.use('/admin/articles', adminArticlesRouter);
 app.use('/admin/categories', adminCategoriesRouter);
+app.use('/admin/settings', adminSettingsRouter);
+app.use('/admin/users', adminUsersRouter);
 
 module.exports = app;
