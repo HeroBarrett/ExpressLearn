@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Category } = require("../../models");
+const { Category, Course } = require("../../models");
 const { Op } = require("sequelize");
 const { NotFoundError, success, failure } = require("../../utils/response");
 
@@ -96,6 +96,11 @@ router.post("/", async function (req, res, next) {
 router.delete("/:id", async function (req, res, next) {
   try {
     const category = await getCategory(req);
+
+    const count = await Course.count({ where: { categoryId: req.params.id } });
+    if (count > 0) {
+      throw new Error("该分类下有课程，不能删除");
+    }
     // 删除分类
     await category.destroy();
     // 响应数据
@@ -144,7 +149,7 @@ async function getCategory(req) {
 
 /**
  * 公共方法：白名单过滤
- * @param {*} req 
+ * @param {*} req
  * @returns {{name: string, rank: number!*}}
  */
 function filterBody(req) {

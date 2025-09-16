@@ -35,11 +35,9 @@ module.exports = {
         type: Sequelize.TEXT
       },
       likesCount: {
-        allowNull: false, // 不允许为空
         type: Sequelize.INTEGER.UNSIGNED, // 无符号
       },
       chaptersCount: {
-        allowNull: false, // 不允许为空
         type: Sequelize.INTEGER.UNSIGNED, // 无符号
       },
       createdAt: {

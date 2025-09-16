@@ -9,6 +9,9 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      models.Category.hasMany(models.Course, {
+        as: "courses",
+      });
     }
   }
   Category.init(

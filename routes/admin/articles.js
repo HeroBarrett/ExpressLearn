@@ -28,6 +28,11 @@ router.get("/", async function (req, res, next) {
       offset,
       // 每页显示多少条
       limit: pageSize,
+      // where: {
+      //   title: {
+      //     [Op.like]: `%${query.title}%`,
+      //   },
+      // },
     };
 
     // 模糊查询
