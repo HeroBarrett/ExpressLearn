@@ -2,7 +2,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-
+require('dotenv').config();
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 // 后台路由文件
@@ -13,6 +13,8 @@ var adminUsersRouter = require('./routes/admin/users');
 var adminCoursesRouter = require('./routes/admin/courses');
 var adminChaptersRouter = require('./routes/admin/chapters');
 var adminChartsRouter = require('./routes/admin/charts');
+// 登录路由
+var adminAuthRouter = require('./routes/admin/auth');
 
 var app = express();
 
@@ -32,6 +34,8 @@ app.use('/admin/users', adminUsersRouter);
 app.use('/admin/courses', adminCoursesRouter);
 app.use('/admin/chapters', adminChaptersRouter);
 app.use('/admin/charts', adminChartsRouter);
+// 登录路由
+app.use('/admin/auth', adminAuthRouter);
 
 
 module.exports = app;
