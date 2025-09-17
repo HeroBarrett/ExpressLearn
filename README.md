@@ -57,7 +57,7 @@ Set-ExecutionPolicy RemoteSigned
 ​	创建项目
 
 ```
-express --no-view clwy-api 
+express --no-view 【项目名】
 ```
 
 

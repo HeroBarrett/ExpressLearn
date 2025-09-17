@@ -23,7 +23,7 @@ router.get("/", async function (req, res, next) {
     // 配置项
     const condition = {
       // 排序 -》 按照id倒序
-      order: [["id", "DESC"]],
+      order: [["rank", "ASC"], ["id", "ASC"]],
       // 分页 -》 从第几条开始，显示多少条
       offset,
       // 每页显示多少条

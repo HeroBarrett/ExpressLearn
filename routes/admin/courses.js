@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Course, Category, User } = require("../../models");
+const { Course, Category, User, Chapter } = require("../../models");
 const { Op } = require("sequelize");
 const { NotFoundError, success, failure } = require("../../utils/response");
 
@@ -118,9 +118,12 @@ router.post("/", async function (req, res, next) {
 router.delete("/:id", async function (req, res, next) {
   try {
     const course = await getCourse(req);
-    // 删除课程
+
+    const count = await Chapter.count({ where: { courseId: course.id } });
+    if (count > 0) {
+      throw new Error("该课程下存在章节，不能删除");
+    }
     await course.destroy();
-    // 响应数据
     success(res, "删除课程成功");
   } catch (error) {
     failure(res, error);
