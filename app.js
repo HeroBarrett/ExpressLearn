@@ -4,6 +4,7 @@ var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 const adminAuth = require("./middlewares/admin-auth");
 const userAuth = require("./middlewares/user-auth");
+const cors = require("cors")
 
 require("dotenv").config();
 
@@ -17,6 +18,7 @@ var articlesRouter = require("./routes/articles");
 var settingsRouter = require("./routes/settings");
 var searchRouter = require("./routes/search");
 var authRouter = require("./routes/auth");
+var likesRouter = require("./routes/likes");
 
 // 后台路由文件
 var adminArticlesRouter = require("./routes/admin/articles");
@@ -30,6 +32,8 @@ var adminChartsRouter = require("./routes/admin/charts");
 var adminAuthRouter = require("./routes/admin/auth");
 
 var app = express();
+
+app.use(cors())
 
 app.use(logger("dev"));
 app.use(express.json());
@@ -47,6 +51,7 @@ app.use("/settings", settingsRouter);
 app.use("/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userAuth, usersRouter);
+app.use("/likes", userAuth, likesRouter);
 
 // 后台路由配置
 app.use("/admin/articles", adminAuth, adminArticlesRouter);
