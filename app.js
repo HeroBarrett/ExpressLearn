@@ -2,11 +2,12 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const adminAuth = require("./middlewares/admin-auth");
-const userAuth = require("./middlewares/user-auth");
 const cors = require("cors")
 
 require("dotenv").config();
+
+const adminAuth = require("./middlewares/admin-auth");
+const userAuth = require("./middlewares/user-auth");
 
 // 前台路由文件
 var indexRouter = require("./routes/index");
