@@ -3,7 +3,7 @@ const router = express.Router();
 const { User } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const { NotFoundError } = require("../../utils/errors");
+const { NotFound } = require("http-errors");
 
 /**
  * 获取所有用户列表
@@ -154,7 +154,7 @@ async function getUser(req) {
   // 查询用户
   const user = await User.findByPk(id);
   if (!user) {
-    throw new NotFoundError("用户不存在");
+    throw new NotFound("用户不存在");
   }
   return user;
 }

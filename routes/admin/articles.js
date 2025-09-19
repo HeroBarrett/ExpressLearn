@@ -3,7 +3,7 @@ const router = express.Router();
 const { Article } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const { NotFoundError } = require("../../utils/errors");
+const { NotFound } = require("http-errors");
 
 /**
  * 获取所有文章列表
@@ -133,7 +133,7 @@ async function getArticle(req) {
   // 查询文章
   const article = await Article.findByPk(id);
   if (!article) {
-    throw new NotFoundError("文章不存在");
+    throw new NotFound("文章不存在");
   }
   return article;
 }

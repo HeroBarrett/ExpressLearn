@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { Setting } = require("../../models");
 const { success, failure } = require("../../utils/responses");
-const { NotFoundError } = require("../../utils/errors");
+const { NotFound } = require("http-errors")
 
 
 /**
@@ -52,7 +52,7 @@ async function getSetting() {
   // 查询系统设置
   const setting = await Setting.findOne();
   if (!setting) {
-    throw new NotFoundError("系统设置不存在");
+    throw new NotFound("系统设置不存在");
   }
   return setting;
 }

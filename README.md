@@ -1498,7 +1498,7 @@ async function getCategory(req) {
 
   const category = await Category.findByPk(id, condition);
   if (!category) {
-    throw new NotFoundError(`ID: ${ id }的分类未找到。`)
+    throw new NotFound(`ID: ${ id }的分类未找到。`)
   }
 
   return category;

@@ -3,7 +3,7 @@ const router = express.Router();
 const { Chapter, Course } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const { NotFoundError } = require("../../utils/errors");
+const { NotFound, BadRequest } = require("http-errors")
 
 /**
  * 获取所有章节列表
@@ -22,7 +22,7 @@ router.get("/", async function (req, res, next) {
     const offset = (currentPage - 1) * pageSize;
 
     if (!query.courseId) {
-      throw new NotFoundError("获取章节列表失败，课程ID不能为空");
+      throw new BadRequest("获取章节列表失败，课程ID不能为空");
     }
 
     // 配置项
@@ -169,7 +169,7 @@ async function getChapter(req) {
   // 查询章节
   const chapter = await Chapter.findByPk(id, condition);
   if (!chapter) {
-    throw new NotFoundError("章节不存在");
+    throw new NotFound("章节不存在");
   }
   return chapter;
 }

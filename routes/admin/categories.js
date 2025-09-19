@@ -3,7 +3,7 @@ const router = express.Router();
 const { Category, Course } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const { NotFoundError } = require("../../utils/errors");
+const { NotFound, Conflict } = require("http-errors");
 
 /**
  * 获取所有分类列表
@@ -86,7 +86,7 @@ router.delete("/:id", async function (req, res, next) {
 
     const count = await Course.count({ where: { categoryId: req.params.id } });
     if (count > 0) {
-      throw new Error("该分类下有课程，不能删除");
+      throw new Conflict("该分类下有课程，不能删除");
     }
     // 删除分类
     await category.destroy();
@@ -129,7 +129,7 @@ async function getCategory(req) {
   // 查询分类
   const category = await Category.findByPk(id);
   if (!category) {
-    throw new NotFoundError("分类不存在");
+    throw new NotFound("分类不存在");
   }
   return category;
 }

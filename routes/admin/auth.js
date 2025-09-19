@@ -4,10 +4,10 @@ const { User } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
 const {
-  BadRequestError,
-  UnauthorizedError,
-  NotFoundError,
-} = require("../../utils/errors");
+  BadRequest,
+  Unauthorized,
+  NotFound,
+} = require('http-errors');
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
@@ -20,11 +20,11 @@ router.post("/sign_in", async function (req, res, next) {
     const { login, password } = req.body;
 
     if (!login) {
-      throw new BadRequestError("邮箱/用户名必须填写");
+      throw new BadRequest("邮箱/用户名必须填写");
     }
 
     if (!password) {
-      throw new BadRequestError("密码必须填写");
+      throw new BadRequest("密码必须填写");
     }
 
     const condition = {
@@ -36,18 +36,18 @@ router.post("/sign_in", async function (req, res, next) {
     // 通过email或username查询用户是否存在
     const user = await User.findOne(condition);
     if (!user) {
-      throw new NotFoundError("用户不存在");
+      throw new NotFound("用户不存在");
     }
 
     // 验证密码
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedError("密码错误");
+      throw new Unauthorized("密码错误");
     }
 
     // 验证是不是管理员
     if (user.role !== 100) {
-      throw new UnauthorizedError("您没有授权登录管理员后台");
+      throw new Unauthorized("您没有授权登录管理员后台");
     }
 
     // 生成身份验证令牌
