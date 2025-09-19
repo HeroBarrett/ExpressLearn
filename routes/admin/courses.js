@@ -22,44 +22,34 @@ router.get("/", async function (req, res, next) {
     const offset = (currentPage - 1) * pageSize;
 
     // 配置项
-    const condition = getCondition();
+    const condition = {
+      ...getCondition(),
+      where: {},
+      order: [["id", "DESC"]],
+      limit: pageSize,
+      offset: offset,
+    };
 
-    // 模糊查询
     if (query.categoryId) {
-      condition.where = {
-        categoryId: {
-          [Op.eq]: query.categoryId,
-        },
-      };
+      condition.where.categoryId = query.categoryId;
     }
+
     if (query.userId) {
-      condition.where = {
-        userId: {
-          [Op.eq]: query.userId,
-        },
-      };
+      condition.where.userId = query.userId;
     }
+
     if (query.name) {
-      condition.where = {
-        name: {
-          [Op.like]: `%${query.name}%`,
-        },
+      condition.where.name = {
+        [Op.like]: `%${query.name}%`,
       };
     }
+
     if (query.recommended) {
-      condition.where = {
-        recommended: {
-          // 需要转布尔值
-          [Op.eq]: query.recommended === "true",
-        },
-      };
+      condition.where.recommended = query.recommended === "true";
     }
+
     if (query.introductory) {
-      condition.where = {
-        introductory: {
-          [Op.eq]: query.introductory === "true",
-        },
-      };
+      condition.where.introductory = query.introductory === "true";
     }
 
     // 从数据库获取数据

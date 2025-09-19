@@ -23,6 +23,7 @@ router.get("/", async function (req, res, next) {
 
     // 配置项
     const condition = {
+      where: {},
       // 排序 -》 按照id倒序
       order: [["id", "DESC"]],
       // 分页 -》 从第几条开始，显示多少条
@@ -33,35 +34,21 @@ router.get("/", async function (req, res, next) {
 
     // 模糊查询
     if (query.email) {
-      condition.where = {
-        email: {
-          [Op.eq]: query.email,
-        },
-      };
+      condition.where.email = query.email;
     }
 
     if (query.username) {
-      condition.where = {
-        username: {
-          [Op.eq]: query.username,
-        },
-      };
+      condition.where.username = query.username;
     }
 
     if (query.nickname) {
-      condition.where = {
-        nickname: {
-          [Op.like]: `%${query.nickname}%`,
-        },
+      condition.where.nickname = {
+        [Op.like]: `%${query.nickname}%`,
       };
     }
 
     if (query.role) {
-      condition.where = {
-        role: {
-          [Op.eq]: query.role,
-        },
-      };
+      condition.where.role = query.role;
     }
 
     // 从数据库获取数据
@@ -78,6 +65,27 @@ router.get("/", async function (req, res, next) {
   } catch (error) {
     failure(res, error);
   }
+});
+
+/**
+ * 查询当前登录的用户详情
+ * GET /admin/users/me
+ */
+router.get("/me", async function (req, res) {
+  try {
+    const user = req.user;
+    success(res, "查询当前用户信息成功。", { user });
+  } catch (error) {
+    failure(res, error);
+  }
+});
+
+/**
+ * 通过 id 查询用户详情
+ * GET /admin/users/:id
+ */
+router.get("/:id", async function (req, res) {
+  // ...
 });
 
 /**

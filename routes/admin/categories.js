@@ -10,50 +10,36 @@ const { NotFoundError } = require("../../utils/errors");
  * GET /admin/categories
  */
 router.get("/", async function (req, res, next) {
-  try {
-    // 拿到模糊查询的数据
-    const query = req.query;
-    // 获取分页所需的参数
-    // 当前第几页，默认第一页
-    const currentPage = Math.abs(Number(query.currentPage)) || 1;
-    // 每页显示多少条，默认10条
-    const pageSize = Math.abs(Number(query.pageSize)) || 10;
-    // 计算offset -> 在数据库中从第几条开始
-    const offset = (currentPage - 1) * pageSize;
+  /**
+   * 查询分类列表
+   * GET /admin/categories
+   */
+  router.get("/", async function (req, res) {
+    try {
+      const query = req.query;
 
-    // 配置项
-    const condition = {
-      // 排序 -》 按照id倒序
-      order: [["rank", "ASC"], ["id", "ASC"]],
-      // 分页 -》 从第几条开始，显示多少条
-      offset,
-      // 每页显示多少条
-      limit: pageSize,
-    };
-
-    // 模糊查询
-    if (query.name) {
-      condition.where = {
-        name: {
-          [Op.like]: `%${query.name}%`,
-        },
+      const condition = {
+        where: {},
+        order: [
+          ["rank", "ASC"],
+          ["id", "ASC"],
+        ],
       };
-    }
 
-    // 从数据库获取数据
-    const { count, rows } = await Category.findAndCountAll(condition);
-    // res.json({ message: "这里是后台的分类列表接口~" });
-    success(res, "查询分类列表成功", {
-      categories: rows,
-      pagination: {
-        total: count, // 总条数
-        currentPage, // 当前第几页
-        pageSize, // 每页显示多少条
-      },
-    });
-  } catch (error) {
-    failure(res, error);
-  }
+      if (query.name) {
+        condition.where.name = {
+          [Op.like]: `%${query.name}%`,
+        };
+      }
+
+      const categories = await Category.findAll(condition);
+      success(res, "查询分类列表成功。", {
+        categories: categories,
+      });
+    } catch (error) {
+      failure(res, error);
+    }
+  });
 });
 
 /**

@@ -28,34 +28,20 @@ router.get("/", async function (req, res, next) {
     // 配置项
     const condition = {
       ...getCondition(),
-      // 排序 -》 按照id倒序
+      where: {},
       order: [
         ["rank", "ASC"],
         ["id", "ASC"],
       ],
-      // 分页 -》 从第几条开始，显示多少条
-      offset,
-      // 每页显示多少条
       limit: pageSize,
-      // where: {
-      //   title: {
-      //     [Op.like]: `%${query.title}%`,
-      //   },
-      // },
+      offset: offset,
     };
 
-    condition.where = {
-      courseId: {
-        [Op.eq]: query.courseId,
-      },
-    };
+    condition.where.courseId = query.courseId;
 
-    // 模糊查询
     if (query.title) {
-      condition.where = {
-        title: {
-          [Op.like]: `%${query.title}%`,
-        },
+      condition.where.title = {
+        [Op.like]: `%${query.title}%`,
       };
     }
 
@@ -102,6 +88,10 @@ router.post("/", async function (req, res, next) {
     const body = filterBody(req);
     // 插入数据库
     const chapter = await Chapter.create(body);
+    // 课程章节数 +1
+    await Course.increment("chaptersCount", {
+      where: { id: chapter.courseId },
+    });
     // 响应数据
     success(res, "创建章节成功", { chapter }, 201);
   } catch (error) {
@@ -120,6 +110,10 @@ router.delete("/:id", async function (req, res, next) {
     await chapter.destroy();
     // 响应数据
     success(res, "删除章节成功");
+    // 课程章节数 -1
+    await Course.decrement("chaptersCount", {
+      where: { id: chapter.courseId },
+    });
   } catch (error) {
     failure(res, error);
   }

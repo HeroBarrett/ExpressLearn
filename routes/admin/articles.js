@@ -23,25 +23,15 @@ router.get("/", async function (req, res, next) {
 
     // 配置项
     const condition = {
-      // 排序 -》 按照id倒序
+      where: {},
       order: [["id", "DESC"]],
-      // 分页 -》 从第几条开始，显示多少条
-      offset,
-      // 每页显示多少条
       limit: pageSize,
-      // where: {
-      //   title: {
-      //     [Op.like]: `%${query.title}%`,
-      //   },
-      // },
+      offset: offset,
     };
 
-    // 模糊查询
     if (query.title) {
-      condition.where = {
-        title: {
-          [Op.like]: `%${query.title}%`,
-        },
+      condition.where.title = {
+        [Op.like]: `%${query.title}%`,
       };
     }
 
