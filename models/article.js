@@ -30,9 +30,11 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
     },
-    content: DataTypes.TEXT
+    content: DataTypes.TEXT,
+    deletedAt: DataTypes.DATE,
   }, {
     sequelize,
+    paranoid: true,
     modelName: 'Article',
   });
   return Article;
