@@ -20,6 +20,7 @@ var settingsRouter = require("./routes/settings");
 var searchRouter = require("./routes/search");
 var authRouter = require("./routes/auth");
 var likesRouter = require("./routes/likes");
+var uploadsRouter = require("./routes/uploads");
 
 // 后台路由文件
 var adminArticlesRouter = require("./routes/admin/articles");
@@ -53,6 +54,7 @@ app.use("/search", searchRouter);
 app.use("/auth", authRouter);
 app.use("/users", userAuth, usersRouter);
 app.use("/likes", userAuth, likesRouter);
+app.use("/uploads", userAuth, uploadsRouter);
 
 // 后台路由配置
 app.use("/admin/articles", adminAuth, adminArticlesRouter);
