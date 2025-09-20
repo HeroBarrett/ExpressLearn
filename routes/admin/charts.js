@@ -3,17 +3,19 @@ const router = express.Router();
 const { sequelize, User } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const { NotFound } = require("http-errors")
+const { NotFound } = require("http-errors");
 
 /**
- * 查询用户性别分布
- * @api {get} /admin/charts/sex 查询用户性别分布
+ * 统计用户性别
+ * GET /admin/charts/sex
  */
-router.get("/sex", async function (req, res, next) {
+router.get("/sex", async function (req, res) {
   try {
-    const male = await User.count({ where: { sex: 0 } });
-    const female = await User.count({ where: { sex: 1 } });
-    const unknown = await User.count({ where: { sex: 2 } });
+    const [male, female, unknown] = await Promise.all([
+      User.count({ where: { sex: 0 } }),
+      User.count({ where: { sex: 1 } }),
+      User.count({ where: { sex: 2 } }),
+    ]);
 
     const data = [
       { value: male, name: "男性" },
@@ -21,7 +23,7 @@ router.get("/sex", async function (req, res, next) {
       { value: unknown, name: "未选择" },
     ];
 
-    success(res, "查询用户性别成功", { data });
+    success(res, "查询用户性别成功。", { data });
   } catch (error) {
     failure(res, error);
   }
@@ -36,13 +38,13 @@ router.get("/user", async (req, res, next) => {
 
     const data = {
       months: [],
-      values: []
-    }
+      values: [],
+    };
 
-    results.forEach(item => {
+    results.forEach((item) => {
       data.months.push(item.month);
       data.values.push(item.value);
-    })
+    });
 
     success(res, "查询每月注册用户数量成功", { data });
   } catch (error) {
