@@ -4,8 +4,8 @@ const { success, failure } = require("../utils/responses");
 const { config, client, singleFileUpload } = require("../utils/aliyun");
 const { BadRequest } = require("http-errors");
 const { Attachment } = require("../models");
-const { v4: uuidv4 } = require('uuid');
-const moment = require('moment')
+const { v4: uuidv4 } = require("uuid");
+const moment = require("moment");
 
 /**
  * 阿里云 OSS 客户端上传
@@ -25,8 +25,8 @@ router.post("/aliyun", function (req, res) {
       await Attachment.create({
         ...req.file,
         userId: req.user,
-        fullpath: req.file.path + '/' + req.file.filename,
-      })
+        fullpath: req.file.path + "/" + req.file.filename,
+      });
       success(res, "上传成功。", { file: req.file.url });
     });
   } catch (error) {
@@ -38,23 +38,22 @@ router.post("/aliyun", function (req, res) {
  * 获取直传阿里云 OSS 授权信息
  * GET /uploads/aliyun_direct
  */
-router.get('/aliyun_direct', async function (req, res, next) {
+router.get("/aliyun_direct", async function (req, res, next) {
   // 有效期
-  const date = moment().add(1, 'days');
+  const date = moment().add(1, "days");
 
   // 自定义上传目录及文件名
   const key = `uploads/${uuidv4()}`;
 
   // 上传安全策略
   const policy = {
-    expiration: date.toISOString(),  // 限制有效期
-    conditions:
-      [
-        ['content-length-range', 0, 5 * 1024 * 1024], // 限制上传文件的大小为：5MB
-        { bucket: client.options.bucket }, // 限制上传的 bucket
-        ['eq', '$key', key], // 限制上传的文件名
-        ['in', '$content-type', ['image/jpeg', 'image/png', 'image/gif', 'image/webp']], // 限制文件类型
-      ],
+    expiration: date.toISOString(), // 限制有效期
+    conditions: [
+      ["content-length-range", 0, 5 * 1024 * 1024], // 限制上传文件的大小为：5MB
+      { bucket: client.options.bucket }, // 限制上传的 bucket
+      ["eq", "$key", key], // 限制上传的文件名
+      ["in", "$content-type", ["image/jpeg", "image/png", "image/gif", "image/webp"]], // 限制文件类型
+    ],
   };
 
   // 签名
@@ -66,18 +65,16 @@ router.get('/aliyun_direct', async function (req, res, next) {
 
   // 返回参数
   const params = {
-    expire: date.format('YYYY-MM-DD HH:mm:ss'),
+    expire: date.format("YYYY-MM-DD HH:mm:ss"),
     policy: formData.policy,
     signature: formData.Signature,
     accessid: formData.OSSAccessKeyId,
     host,
     key,
-    url: host + '/' + key,
+    url: host + "/" + key,
   };
 
-  success(res, '获取阿里云 OSS 授权信息成功。', params);
+  success(res, "获取阿里云 OSS 授权信息成功。", params);
 });
-
-
 
 module.exports = router;

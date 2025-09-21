@@ -70,7 +70,7 @@ router.get("/", async function (req, res) {
         total: count,
         currentPage,
         pageSize,
-      }
+      },
     });
   } catch (error) {
     failure(res, error);

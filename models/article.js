@@ -1,7 +1,5 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
   class Article extends Model {
     /**
@@ -13,29 +11,32 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   }
-  Article.init({
-    title: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "标题必须存在",
+  Article.init(
+    {
+      title: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notNull: {
+            msg: "标题必须存在",
+          },
+          notEmpty: {
+            msg: "标题不能为空",
+          },
+          len: {
+            args: [2, 45],
+            msg: "标题长度必须在2-45之间",
+          },
         },
-        notEmpty: {
-          msg: "标题不能为空",
-        },
-        len: {
-          args: [2, 45],
-          msg: "标题长度必须在2-45之间",  
-        }
       },
+      content: DataTypes.TEXT,
+      deletedAt: DataTypes.DATE,
     },
-    content: DataTypes.TEXT,
-    deletedAt: DataTypes.DATE,
-  }, {
-    sequelize,
-    paranoid: true,
-    modelName: 'Article',
-  });
+    {
+      sequelize,
+      paranoid: true,
+      modelName: "Article",
+    }
+  );
   return Article;
 };

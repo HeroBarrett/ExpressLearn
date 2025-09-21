@@ -36,8 +36,6 @@ RABBITMQ_URL=
 - `MAILER`开头的配置，为邮件服务器的配置。
 - `RABBITMQ_URL`配置为消息队列服务器地址。
 
-
-
 ## 生成秘钥
 
 在命令行中运行
@@ -109,59 +107,45 @@ npm start
 密码: 123123
 ```
 
-
-
-
-
-
-
-
-
 # 一、express的使用
 
 ## 01-nvm 安装 Node.js
 
 使用nvm可以安装多个不同版本的`Node.js`，并且根据需要随意的切换所需版本。
 
-
-
-​	查看node的所有版本
+​ 查看node的所有版本
 
 ```
 nvm list available
 ```
 
-​	安装指定版本的node
+​ 安装指定版本的node
 
 ```
 nvm install 22.19.0
 ```
 
-​	查看node版本
+​ 查看node版本
 
 ```
 node -v
 ```
 
-​	查看所有安装过的版本
+​ 查看所有安装过的版本
 
 ```
 nvm list
 ```
 
-​	使用别的版本的node
+​ 使用别的版本的node
 
 ```
 nvm use 18.20.2
 ```
 
-
-
 ## 02-安装Express脚手架
 
-
-
-​	安装express-generator工具脚本
+​ 安装express-generator工具脚本
 
 ```
 npm i -g express-generator@4
@@ -171,41 +155,35 @@ npm i -g express-generator@4
 Set-ExecutionPolicy RemoteSigned
 ```
 
-​	创建项目
+​ 创建项目
 
 ```
 express --no-view 【项目名】
 ```
-
-
 
 项目是专门开发接口的，而接口所需要的是`json`格式，而不是直接输出`HTML`。
 
 所以项目输出需要修改为json格式
 
 ```js
-router.get('/', function (req, res, next) {
-  res.json({ message: 'Hello Node.js' });
+router.get("/", function (req, res, next) {
+  res.json({ message: "Hello Node.js" });
 });
 ```
 
-
-
-​	使用nodemon监听项目(热更新)
+​ 使用nodemon监听项目(热更新)
 
 ```
 npm i nodemon
 ```
 
-​	然后打开项目根目录下的`package.json`，将`start`这里修改为
+​ 然后打开项目根目录下的`package.json`，将`start`这里修改为
 
 ```js
 "scripts": {
   "start": "nodemon ./bin/www"
 },
 ```
-
-
 
 ## 03-使用 Sequelize ORM
 
@@ -238,30 +216,26 @@ sequelize init
 | models             | 模型文件       |
 | seeders            | 种子文件       |
 
-
-
 ## 04-Sequelize 使用
 
-| 命令行                                                       | 说明                                                         |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| sequelize db:create --charset utf8mb4 --collate utf8mb4_general_ci | 创建数据库-windows会有问题，到navicat创建                    |
-| sequelize model:generate --name Article --attributes title:string,content:text | 创建模型(表名字单数)-到迁移文件微调                          |
-| sequelize db:migrate                                         | 运行迁移命令                                                 |
-| sequelize seed:generate --name article                       | 创建种子文件                                                 |
-| sequelize db:seed --seed xxx-article                         | 运行指定种子文件                                             |
-| sequelize db:seed:all                                        | 慎用，会把种子文件全部执行                                   |
-| sequelize db:migrate:undo                                    | 回滚迁移(删除表)                                             |
-|                                                              |                                                              |
-| ---------模型操作命令-----------                             | ------------说明-----------                                  |
-| 模型.findAll()                                               | 查找全部数据                                                 |
-| 模型.findByPk(id)                                            | 根据住建（id）查找                                           |
-| 模型.create(body)                                            | 创建一条数据                                                 |
-| 模型.destroy()                                               | 不需要传参，先把模型.findByPk(id)找到后再删除                |
-| 模型.update(body);                                           | 修改一条数据，先把模型.findByPk(id)找到后再修改              |
-| 模型.findAndCountAll(condition)                              | 分页查找,count 是查询到的数据的总数，rows 中才是最终查询到的数据 |
-| 模型.count({ where: { categoryId: req.params.id } })         | 查询有几条记录                                               |
-
-
+| 命令行                                                                         | 说明                                                             |
+| ------------------------------------------------------------------------------ | ---------------------------------------------------------------- |
+| sequelize db:create --charset utf8mb4 --collate utf8mb4_general_ci             | 创建数据库-windows会有问题，到navicat创建                        |
+| sequelize model:generate --name Article --attributes title:string,content:text | 创建模型(表名字单数)-到迁移文件微调                              |
+| sequelize db:migrate                                                           | 运行迁移命令                                                     |
+| sequelize seed:generate --name article                                         | 创建种子文件                                                     |
+| sequelize db:seed --seed xxx-article                                           | 运行指定种子文件                                                 |
+| sequelize db:seed:all                                                          | 慎用，会把种子文件全部执行                                       |
+| sequelize db:migrate:undo                                                      | 回滚迁移(删除表)                                                 |
+|                                                                                |                                                                  |
+| ---------模型操作命令-----------                                               | ------------说明-----------                                      |
+| 模型.findAll()                                                                 | 查找全部数据                                                     |
+| 模型.findByPk(id)                                                              | 根据住建（id）查找                                               |
+| 模型.create(body)                                                              | 创建一条数据                                                     |
+| 模型.destroy()                                                                 | 不需要传参，先把模型.findByPk(id)找到后再删除                    |
+| 模型.update(body);                                                             | 修改一条数据，先把模型.findByPk(id)找到后再修改                  |
+| 模型.findAndCountAll(condition)                                                | 分页查找,count 是查询到的数据的总数，rows 中才是最终查询到的数据 |
+| 模型.count({ where: { categoryId: req.params.id } })                           | 查询有几条记录                                                   |
 
 ## 05-发送请求的配置
 
@@ -272,7 +246,7 @@ sequelize init
 ```js
 // 定义查询条件
 const condition = {
-  order: [['id', 'DESC']]
+  order: [["id", "DESC"]],
 };
 ```
 
@@ -286,18 +260,19 @@ const articles = await Article.findAll(condition);
 
 ```js
 // 如果有 title 查询参数，就添加到 where 条件中
-    if(query.title) {
-      condition.where = { // 添加到前面定义的condition对象中 
-        title: {
-          [Op.like]: `%${query.title}%` 
-        }
-      };
-    }	
+if (query.title) {
+  condition.where = {
+    // 添加到前面定义的condition对象中
+    title: {
+      [Op.like]: `%${query.title}%`,
+    },
+  };
+}
 ```
 
 ### 分页查找
 
-​	sql语句中，传入的LIMIT如下
+​ sql语句中，传入的LIMIT如下
 
 ```sql
 # sql
@@ -311,7 +286,7 @@ SELECT * FROM `Articles` LIMIT 10, 10;
 | 第 2 页                 | 10                   | 10                         |
 | 第 3 页                 | 20                   | 10                         |
 
-​	*推算出公式*	
+​ _推算出公式_
 
 ```
 offset = (currentPage - 1) * pageSize
@@ -319,20 +294,20 @@ offset = (currentPage - 1) * pageSize
 
 ```js
 // 当前是第几页，如果不传，那就是第一页
- const currentPage = Math.abs(Number(query.currentPage)) || 1;
+const currentPage = Math.abs(Number(query.currentPage)) || 1;
 
 // 每页显示多少条数据，如果不传，那就显示10条
- const pageSize = Math.abs(Number(query.pageSize)) || 10;
+const pageSize = Math.abs(Number(query.pageSize)) || 10;
 
 // 计算 offset
 const offset = (currentPage - 1) * pageSize;
 
 const condition = {
-  order: [['id', 'DESC']],
+  order: [["id", "DESC"]],
 
   // 在查询条件中添加 limit 和 offset
   limit: pageSize,
-  offset: offset
+  offset: offset,
 };
 ```
 
@@ -347,7 +322,7 @@ const { count, rows } = await Article.findAndCountAll(condition);
 // 返回查询结果
 res.json({
   status: true,
-  message: '查询文章列表成功。',
+  message: "查询文章列表成功。",
   data: {
     articles: rows,
     pagination: {
@@ -355,9 +330,8 @@ res.json({
       currentPage,
       pageSize,
     },
-  }
+  },
 });
-
 ```
 
 ### 白名单过滤
@@ -373,14 +347,11 @@ res.json({
 const body = {
   title: req.body.title,
   content: req.body.content,
-}
+};
 
 // 使用过滤好的 body 数据，创建文章
 const article = await Article.create(body);
-
 ```
-
-
 
 ## 06-验证表单数据
 
@@ -399,7 +370,7 @@ title: {
     notEmpty: {		// 传了title过来，但是却没有值
       msg: '标题不能为空。'
     },
-    len: {	
+    len: {
       args: [2, 45],
       msg: '标题长度需要在2 ~ 45个字符之间。'
     }
@@ -410,19 +381,19 @@ title: {
 修改异常，当验证表单抛出异常时，error会接受到`error.name`。还有实际的错误信息，位置在`error.errors`，里面又是个数组，这说明可能会有多个错误信息，但我们只需要分别取出它们的`message`，提示给用户看就好了
 
 ```js
-if (error.name === 'SequelizeValidationError') {
-  const errors = error.errors.map(e => e.message);
+if (error.name === "SequelizeValidationError") {
+  const errors = error.errors.map((e) => e.message);
 
   res.status(400).json({
     status: false,
-    message: '请求参数错误。',
-    errors
+    message: "请求参数错误。",
+    errors,
   });
 } else {
   res.status(500).json({
     status: false,
-    message: '创建文章失败。',
-    errors: [error.message]
+    message: "创建文章失败。",
+    errors: [error.message],
   });
 }
 ```
@@ -430,8 +401,6 @@ if (error.name === 'SequelizeValidationError') {
 ## 07-封装
 
 参考网站
-
-
 
 常用的响应码
 
@@ -442,8 +411,6 @@ if (error.name === 'SequelizeValidationError') {
 | 请求参数错误 | 400    | 数据验证失败，而且还需要 map 遍历错误信息 |
 | 数据不存在   | 404    | 查询不存在的内容                          |
 | 服务器错误   | 500    | 未知的各种问题                            |
-
-
 
 RESTful 风格路由
 
@@ -460,20 +427,18 @@ RESTful 风格路由
 - 每一个分类，都包含有多个课程。这种情况，我们叫做：`一对多`，英文叫做`hasMany`。
 - 那反过来，每个课程，都`属于`一个分类。这种情况，我们叫做`belongsTo`。
 
-
-
 ## 01-设计数据库
 
 ```
 ---- Categories：分类表
-id（编号）: integer，主键，不为null，无符号，自增 
+id（编号）: integer，主键，不为null，无符号，自增
 name（名称）：varchar，不为null
 rank（排序）：integer，无符号，不为null，默认值：1
 ```
 
 ```
 ---- Courses：课程表
-id（编号）: integer，主键，不为null，无符号，自增 
+id（编号）: integer，主键，不为null，无符号，自增
 categoryId（分类 ID）：integer，无符号，不为null，index索引
 userId（用户Id）：integer，无符号，不为null，index索引
 name（名称）：varchar，不为null
@@ -523,8 +488,6 @@ name（项目名称）：varchar
 icp（备案号）：varchar
 copyright（版权信息）：varchar
 ```
-
-
 
 ## 02-MySQL Workbench 的使用
 
@@ -604,31 +567,7 @@ copyright（版权信息）：varchar
 | icp(备案号)         | varchar | -         | -      | -    | -       |
 | copyright(版权信息) | varchar | -         | -      | -    | -       |
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ![image-20250915212540315](C:\Users\c5106\AppData\Roaming\Typora\typora-user-images\image-20250915212540315.png)
-
-
-
-
-
-
 
 ### 建分类表：
 
@@ -755,63 +694,63 @@ sequelize model:generate --name Course --attributes categoryId:integer,userId:in
 稍作修改
 
 ```js
-	await queryInterface.createTable('Courses', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-      },
-      categoryId: {
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-        allowNull: false, // 不允许为空
-      },
-      userId: {
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-        allowNull: false, // 不允许为空
-      },
-      name: {
-        allowNull: false, // 不允许为空
-        type: Sequelize.STRING
-      },
-      image: {
-        type: Sequelize.STRING
-      },
-      recommended: {
-        type: Sequelize.BOOLEAN
-      },
-      introductory: {
-        allowNull: false, // 不允许为空
-        type: Sequelize.BOOLEAN
-      },
-      content: {
-        type: Sequelize.TEXT
-      },
-      likesCount: {
-        allowNull: false, // 不允许为空
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-      },
-      chaptersCount: {
-        allowNull: false, // 不允许为空
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-    // 添加索引
-    await queryInterface.addIndex("Courses", {
-      fields: ["categoryId"], // 要索引的字段
-    });
-    // 添加索引
-    await queryInterface.addIndex("Courses", {
-      fields: ["userId"], // 要索引的字段
-    });
+await queryInterface.createTable("Courses", {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+  },
+  categoryId: {
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+    allowNull: false, // 不允许为空
+  },
+  userId: {
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+    allowNull: false, // 不允许为空
+  },
+  name: {
+    allowNull: false, // 不允许为空
+    type: Sequelize.STRING,
+  },
+  image: {
+    type: Sequelize.STRING,
+  },
+  recommended: {
+    type: Sequelize.BOOLEAN,
+  },
+  introductory: {
+    allowNull: false, // 不允许为空
+    type: Sequelize.BOOLEAN,
+  },
+  content: {
+    type: Sequelize.TEXT,
+  },
+  likesCount: {
+    allowNull: false, // 不允许为空
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+  },
+  chaptersCount: {
+    allowNull: false, // 不允许为空
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+  },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+  updatedAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+});
+// 添加索引
+await queryInterface.addIndex("Courses", {
+  fields: ["categoryId"], // 要索引的字段
+});
+// 添加索引
+await queryInterface.addIndex("Courses", {
+  fields: ["userId"], // 要索引的字段
+});
 ```
 
 ### 建章节表：
@@ -823,45 +762,45 @@ sequelize model:generate --name Chapter --attributes courseId:integer,title:stri
 微调数据
 
 ```js
-	await queryInterface.createTable('Chapters', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-      },
-      courseId: {
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-        allowNull: false, // 不允许为空
-      },
-      title: {
-        allowNull: false, // 不允许为空
-        type: Sequelize.STRING
-      },
-      content: {
-        type: Sequelize.TEXT
-      },
-      video: {
-        type: Sequelize.STRING
-      },
-      rank: {
-        allowNull: false, // 不允许为空
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-        defaultValue: 1, // 默认值1
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-    // 添加索引
-    await queryInterface.addIndex("Chapters", {
-      fields: ["courseId"], // 要索引的字段
-    });
+await queryInterface.createTable("Chapters", {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+  },
+  courseId: {
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+    allowNull: false, // 不允许为空
+  },
+  title: {
+    allowNull: false, // 不允许为空
+    type: Sequelize.STRING,
+  },
+  content: {
+    type: Sequelize.TEXT,
+  },
+  video: {
+    type: Sequelize.STRING,
+  },
+  rank: {
+    allowNull: false, // 不允许为空
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+    defaultValue: 1, // 默认值1
+  },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+  updatedAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+});
+// 添加索引
+await queryInterface.addIndex("Chapters", {
+  fields: ["courseId"], // 要索引的字段
+});
 ```
 
 ### 建点赞表：
@@ -873,41 +812,39 @@ sequelize model:generate --name Like --attributes courseId:integer,userId:intege
 微调
 
 ```js
-	await queryInterface.createTable('Likes', {
-      id: {
-        allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-      },
-      courseId: {
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-        allowNull: false, // 不允许为空
-      },
-      userId: {
-        type: Sequelize.INTEGER.UNSIGNED, // 无符号
-        allowNull: false, // 不允许为空
-      },
-      createdAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
-      updatedAt: {
-        allowNull: false,
-        type: Sequelize.DATE
-      }
-    });
-    // 添加索引
-    await queryInterface.addIndex("Likes", {
-      fields: ["courseId"], // 要索引的字段
-    });
-    // 添加索引
-    await queryInterface.addIndex("Likes", {
-      fields: ["userId"], // 要索引的字段
-    });
+await queryInterface.createTable("Likes", {
+  id: {
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+  },
+  courseId: {
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+    allowNull: false, // 不允许为空
+  },
+  userId: {
+    type: Sequelize.INTEGER.UNSIGNED, // 无符号
+    allowNull: false, // 不允许为空
+  },
+  createdAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+  updatedAt: {
+    allowNull: false,
+    type: Sequelize.DATE,
+  },
+});
+// 添加索引
+await queryInterface.addIndex("Likes", {
+  fields: ["courseId"], // 要索引的字段
+});
+// 添加索引
+await queryInterface.addIndex("Likes", {
+  fields: ["userId"], // 要索引的字段
+});
 ```
-
-
 
 ### 建系统设置表：
 
@@ -927,8 +864,6 @@ sequelize model:generate --name Setting --attributes name:string,icp:string,copy
 ```
 
 # 接口开发
-
-
 
 ## 01-分类接口
 
@@ -992,12 +927,6 @@ rank: {
 },
 ```
 
-
-
-
-
-
-
 ## 02-系统设置接口
 
 先添加点默认数据，好方便我们做测试，新建一个种子文件
@@ -1029,12 +958,6 @@ async down(queryInterface, Sequelize) {
 ```
 sequelize db:seed --seed xxx-setting
 ```
-
-
-
-
-
-
 
 ## 03-用户管理接口
 
@@ -1068,8 +991,8 @@ sequelize db:migrate
 
 ```js
 User.init({
-  // ... 
-  avatar: DataTypes.STRING 
+  // ...
+  avatar: DataTypes.STRING
 }
 ```
 
@@ -1236,7 +1159,7 @@ name: {
 },
 ```
 
-### *使用 bcryptjs加密数据
+### \*使用 bcryptjs加密数据
 
 密码不要明文存储在数据库里，而是要进行加密存储
 
@@ -1296,13 +1219,9 @@ const isPasswordValid = bcrypt.compareSync("用户输入的密码", "加密后�
 // isPasswordValid ->  true or false
 ```
 
-
-
-
-
 ## 04-课程接口（关联模型）
 
-> 如何防止出现孤儿记录  -> 重点
+> 如何防止出现孤儿记录 -> 重点
 
 先生成一个种子文件
 
@@ -1410,7 +1329,7 @@ likesCount: DataTypes.INTEGER,
 chaptersCount: DataTypes.INTEGER
 ```
 
-### *关联模型
+### \*关联模型
 
 如何在这个接口里，直接显示出对应的分类和用户？
 
@@ -1428,20 +1347,21 @@ static associate(models) {
 02-修改路由，顶部要引用分类和用户模型
 
 ```js
-const { Course, Category, User } = require('../../models');
+const { Course, Category, User } = require("../../models");
 // ....
 const condition = {
-  include: [	// 添加包含
+  include: [
+    // 添加包含
     {
-      model: Category
+      model: Category,
     },
     {
-      model: User
-    }
+      model: User,
+    },
   ],
-  order: [['id', 'DESC']],
+  order: [["id", "DESC"]],
   limit: pageSize,
-  offset: offset
+  offset: offset,
 };
 ```
 
@@ -1460,22 +1380,22 @@ static associate(models) {
 
 ```js
 const condition = {
-  attributes: { exclude: ['CategoryId', 'UserId'] },
+  attributes: { exclude: ["CategoryId", "UserId"] },
   include: [
     {
       model: Category,
-      as: 'category',
-      attributes: ['id', 'name']
+      as: "category",
+      attributes: ["id", "name"],
     },
     {
       model: User,
-      as: 'user',
-      attributes: ['id', 'username', 'avatar']
-    }
+      as: "user",
+      attributes: ["id", "username", "avatar"],
+    },
   ],
-  order: [['id', 'DESC']],
+  order: [["id", "DESC"]],
   limit: pageSize,
-  offset: offset
+  offset: offset,
 };
 ```
 
@@ -1509,21 +1429,21 @@ async function getCategory(req) {
     include: [
       {
         model: Course,
-        as: 'courses',
+        as: "courses",
       },
-    ]
-  }
+    ],
+  };
 
   const category = await Category.findByPk(id, condition);
   if (!category) {
-    throw new NotFound(`ID: ${ id }的分类未找到。`)
+    throw new NotFound(`ID: ${id}的分类未找到。`);
   }
 
   return category;
 }
 ```
 
-### *处理孤儿记录
+### \*处理孤儿记录
 
 在删除分类的时候，查询一下，有没有关联的课程。只要有对应的课程，就提示用户，不能删除。
 
@@ -1532,30 +1452,26 @@ async function getCategory(req) {
 - 方案三：在删除分类的时候，查询一下，有没有关联的课程。只要有对应的课程，就提示用户，不能删除。
 
 ```js
-const { Category, Course } = require('../../models');
+const { Category, Course } = require("../../models");
 
 // ...
 
-router.delete('/:id', async function (req, res) {
+router.delete("/:id", async function (req, res) {
   try {
     const category = await getCategory(req);
 
     const count = await Course.count({ where: { categoryId: req.params.id } });
     if (count > 0) {
-      throw new Error('当前分类有课程，无法删除。');
+      throw new Error("当前分类有课程，无法删除。");
     }
 
     await category.destroy();
-    success(res, '删除分类成功。');
+    success(res, "删除分类成功。");
   } catch (error) {
     failure(res, error);
   }
 });
 ```
-
-
-
-
 
 ## 05-章节接口（关联模型）
 
@@ -1676,10 +1592,3 @@ static associate(models) {
   models.Course.hasMany(models.Chapter, { as: 'chapters' });
 }
 ```
-
-
-
-
-
-
-

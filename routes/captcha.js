@@ -26,10 +26,10 @@ router.get("/", async (req, res) => {
     // 直接输出图片
     // res.type("svg");
     // res.status(200).send(captcha.data);
-    success(res, '获取验证码成功', {
+    success(res, "获取验证码成功", {
       captchaKey,
       captchaData: captcha.data,
-    })
+    });
   } catch (error) {
     failure(res, error);
   }

@@ -43,16 +43,18 @@ const mailProducer = async (msg) => {
 const mailConsumer = async () => {
   try {
     await connectToRabbitMQ();
-    channel.consume('mail_queue',
+    channel.consume(
+      "mail_queue",
       async (msg) => {
         const message = JSON.parse(msg.content.toString());
         await sendMail(message.to, message.subject, message.html);
-      }, {
+      },
+      {
         noAck: true,
       }
     );
   } catch (error) {
-    logger.error('邮件队列消费者错误：', error);
+    logger.error("邮件队列消费者错误：", error);
   }
 };
 

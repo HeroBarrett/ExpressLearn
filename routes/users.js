@@ -74,10 +74,7 @@ router.put("/account", async function (req, res) {
     const user = await getUser(req, true);
 
     // 验证当前密码是否正确
-    const isPasswordValid = bcrypt.compareSync(
-      body.currentPassword,
-      user.password
-    );
+    const isPasswordValid = bcrypt.compareSync(body.currentPassword, user.password);
     if (!isPasswordValid) {
       throw new BadRequest("当前密码不正确。");
     }

@@ -30,10 +30,7 @@ function failure(res, error) {
     // Sequelize 验证错误
     statusCode = 400;
     errors = error.errors.map((e) => e.message);
-  } else if (
-    error.name === "JsonWebTokenError" ||
-    error.name === "TokenExpiredError"
-  ) {
+  } else if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
     // Token 验证错误
     statusCode = 401;
     errors = "您提交的 token 错误或已过期。";

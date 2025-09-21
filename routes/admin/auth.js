@@ -3,11 +3,7 @@ const router = express.Router();
 const { User } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const {
-  BadRequest,
-  Unauthorized,
-  NotFound,
-} = require('http-errors');
+const { BadRequest, Unauthorized, NotFound } = require("http-errors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 

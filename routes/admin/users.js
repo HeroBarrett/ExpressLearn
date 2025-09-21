@@ -4,7 +4,7 @@ const { User } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
 const { NotFound } = require("http-errors");
-const { delKey } = require('../../utils/redis');
+const { delKey } = require("../../utils/redis");
 
 /**
  * 获取所有用户列表

@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Likes', {
+    await queryInterface.createTable("Likes", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -19,12 +19,12 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
     // 添加索引
     await queryInterface.addIndex("Likes", {
@@ -36,6 +36,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Likes');
-  }
+    await queryInterface.dropTable("Likes");
+  },
 };

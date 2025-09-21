@@ -1,8 +1,8 @@
-'use strict';
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Courses', {
+    await queryInterface.createTable("Courses", {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -19,20 +19,20 @@ module.exports = {
       },
       name: {
         allowNull: false, // 不允许为空
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       image: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
       },
       recommended: {
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
       },
       introductory: {
         allowNull: false, // 不允许为空
-        type: Sequelize.BOOLEAN
+        type: Sequelize.BOOLEAN,
       },
       content: {
-        type: Sequelize.TEXT
+        type: Sequelize.TEXT,
       },
       likesCount: {
         type: Sequelize.INTEGER.UNSIGNED, // 无符号
@@ -42,12 +42,12 @@ module.exports = {
       },
       createdAt: {
         allowNull: false,
-        type: Sequelize.DATE
+        type: Sequelize.DATE,
       },
       updatedAt: {
         allowNull: false,
-        type: Sequelize.DATE
-      }
+        type: Sequelize.DATE,
+      },
     });
     // 添加索引
     await queryInterface.addIndex("Courses", {
@@ -59,6 +59,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Courses');
-  }
+    await queryInterface.dropTable("Courses");
+  },
 };
