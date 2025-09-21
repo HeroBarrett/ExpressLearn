@@ -19,6 +19,7 @@ module.exports = (sequelize, DataTypes) => {
         as: "likeCourses",
       });
       models.User.hasMany(models.Attachment, { as: "attachments" });
+      models.User.hasMany(models.Order, { as: "orders" });
     }
   }
   User.init(
@@ -64,7 +65,7 @@ module.exports = (sequelize, DataTypes) => {
           if (!value) {
             throw new BadRequest("密码不能为空。");
           }
-          
+
           if (value.length >= 6 && value.length <= 45) {
             this.setDataValue("password", bcrypt.hashSync(value, 10));
           } else {
@@ -102,8 +103,8 @@ module.exports = (sequelize, DataTypes) => {
           notNull: { msg: "用户组必须选择。" },
           notEmpty: { msg: "用户组不能为空。" },
           isIn: {
-            args: [[0, 100]],
-            msg: "用户组的值必须是，普通用户：0 管理员：100。",
+            args: [[0, 1, 100]],
+            msg: "用户组的值必须是,普通用户:0 大会员:1 管理员:100。",
           },
         },
       },

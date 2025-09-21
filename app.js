@@ -30,6 +30,7 @@ var likesRouter = require("./routes/likes");
 var uploadsRouter = require("./routes/uploads");
 var captchaRouter = require("./routes/captcha");
 var membershipsRouter = require("./routes/memberships");
+var ordersRouter = require("./routes/orders");
 
 // 后台路由文件
 var adminArticlesRouter = require("./routes/admin/articles");
@@ -42,6 +43,7 @@ var adminChartsRouter = require("./routes/admin/charts");
 var adminAttachmentsRouter = require("./routes/admin/attachments");
 var adminLogsRouter = require("./routes/admin/logs");
 var adminMembershipsRouter = require("./routes/admin/memberships");
+var adminOrdersRouter = require("./routes/admin/orders");
 
 // 登录路由
 var adminAuthRouter = require("./routes/admin/auth");
@@ -70,6 +72,7 @@ app.use("/likes", userAuth, likesRouter);
 app.use("/uploads", userAuth, uploadsRouter);
 app.use("/captcha", captchaRouter);
 app.use("/memberships", membershipsRouter);
+app.use("/orders", userAuth, ordersRouter);
 
 // 后台路由配置
 app.use("/admin/articles", adminAuth, adminArticlesRouter);
@@ -82,6 +85,7 @@ app.use("/admin/charts", adminAuth, adminChartsRouter);
 app.use("/admin/attachments", adminAuth, adminAttachmentsRouter);
 app.use("/admin/logs", adminAuth, adminLogsRouter);
 app.use("/admin/memberships", adminAuth, adminMembershipsRouter);
+app.use("/admin/orders", adminAuth, adminOrdersRouter);
 
 // 登录路由
 app.use("/admin/auth", adminAuthRouter);
