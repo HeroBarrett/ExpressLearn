@@ -19,12 +19,21 @@ ALIYUN_ACCESS_KEY_ID=阿里云的 AccessKey ID
 ALIYUN_ACCESS_KEY_SECRET=阿里云的 AccessKey Secret
 ALIYUN_BUCKET=阿里云 OSS 的 Bucket 名称
 ALIYUN_REGION=阿里云 OSS Bucket 所在地域名称
+
+MAILER_HOST=邮件服务器地址
+MAILER_PORT=邮件服务器端口
+MAILER_SECURE=465端口填写：true，否则填写：false
+MAILER_USER=你的邮箱地址
+MAILER_PASS=你的邮箱授权码或密码
 ```
 
 - `NODE_ENV`配置为开发环境，如部署在生产环境可改为`production`。
 - `PORT`配置为服务端口。
 - `SECRET`配置为密钥。
 - `ALIYUN`开头的配置，均为阿里云的配置。请注册阿里云云账号，创建存储空间，并创建`Access Key`。
+- `MAILER`开头的配置，为邮件服务器的配置。
+
+
 
 ## 生成秘钥
 
