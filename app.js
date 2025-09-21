@@ -11,7 +11,6 @@ require("dotenv").config();
 const { mailConsumer } = require("./utils/rabbit-mq");
 (async () => {
   await mailConsumer();
-  console.log("邮件消费者已启动");
 })();
 
 const adminAuth = require("./middlewares/admin-auth");
@@ -40,6 +39,7 @@ var adminCoursesRouter = require("./routes/admin/courses");
 var adminChaptersRouter = require("./routes/admin/chapters");
 var adminChartsRouter = require("./routes/admin/charts");
 var adminAttachmentsRouter = require("./routes/admin/attachments");
+var adminLogsRouter = require("./routes/admin/logs");
 
 // 登录路由
 var adminAuthRouter = require("./routes/admin/auth");
@@ -77,6 +77,7 @@ app.use("/admin/courses", adminAuth, adminCoursesRouter);
 app.use("/admin/chapters", adminAuth, adminChaptersRouter);
 app.use("/admin/charts", adminAuth, adminChartsRouter);
 app.use("/admin/attachments", adminAuth, adminAttachmentsRouter);
+app.use("/admin/logs", adminAuth, adminLogsRouter);
 
 // 登录路由
 app.use("/admin/auth", adminAuthRouter);
