@@ -4,6 +4,7 @@ const { User } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
 const { NotFound } = require("http-errors");
+const { delKey } = require('../../utils/redis');
 
 /**
  * 获取所有用户列表
@@ -81,14 +82,6 @@ router.get("/me", async function (req, res) {
 });
 
 /**
- * 通过 id 查询用户详情
- * GET /admin/users/:id
- */
-router.get("/:id", async function (req, res) {
-  // ...
-});
-
-/**
  * 查询用户详情
  * GET /admin/users/:id
  */
@@ -132,14 +125,10 @@ router.put("/:id", async function (req, res, next) {
     // 白名单过滤
     const body = filterBody(req);
     await user.update(body);
+    // 清除缓存
+    await clearCache(user);
     // 相应数据
-    res.json({
-      status: true,
-      message: "更新用户成功",
-      data: {
-        user,
-      },
-    });
+    success(res, "更新用户成功", { user });
   } catch (error) {
     failure(res, error);
   }
@@ -176,6 +165,15 @@ function filterBody(req) {
     role: req.body.role,
     avatar: req.body.avatar,
   };
+}
+
+/**
+ * 清除缓存
+ * @param user
+ * @returns {Promise<void>}
+ */
+async function clearCache(user) {
+  await delKey(`user:${user.id}`);
 }
 
 module.exports = router;

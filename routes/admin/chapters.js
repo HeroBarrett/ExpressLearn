@@ -3,7 +3,8 @@ const router = express.Router();
 const { Chapter, Course } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const { NotFound, BadRequest } = require("http-errors")
+const { NotFound, BadRequest } = require("http-errors");
+const { delKey } = require("../../utils/redis");
 
 /**
  * 获取所有章节列表
@@ -92,6 +93,8 @@ router.post("/", async function (req, res, next) {
     await Course.increment("chaptersCount", {
       where: { id: chapter.courseId },
     });
+    // 清除缓存
+    await clearCache(chapter);
     // 响应数据
     success(res, "创建章节成功", { chapter }, 201);
   } catch (error) {
@@ -108,6 +111,8 @@ router.delete("/:id", async function (req, res, next) {
     const chapter = await getChapter(req);
     // 删除章节
     await chapter.destroy();
+    // 清除缓存
+    await clearCache(chapter);
     // 响应数据
     success(res, "删除章节成功");
     // 课程章节数 -1
@@ -129,14 +134,10 @@ router.put("/:id", async function (req, res, next) {
     // 白名单过滤
     const body = filterBody(req);
     await chapter.update(body);
+    // 清除缓存
+    await clearCache(chapter);
     // 相应数据
-    res.json({
-      status: true,
-      message: "更新章节成功",
-      data: {
-        chapter,
-      },
-    });
+    success(res, "更新章节成功", { chapter });
   } catch (error) {
     failure(res, error);
   }
@@ -187,6 +188,16 @@ function filterBody(req) {
     video: req.body.video,
     rank: req.body.rank,
   };
+}
+
+/**
+ * 清除缓存
+ * @param chapter
+ * @returns {Promise<void>}
+ */
+async function clearCache(chapter) {
+  await delKey(`chapters:${chapter.courseId}`);
+  await delKey(`chapter:${chapter.id}`);
 }
 
 module.exports = router;

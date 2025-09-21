@@ -4,42 +4,37 @@ const { Category, Course } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
 const { NotFound, Conflict } = require("http-errors");
+const { delKey } = require("../../utils/redis");
 
 /**
- * 获取所有分类列表
+ * 查询分类列表
  * GET /admin/categories
  */
-router.get("/", async function (req, res, next) {
-  /**
-   * 查询分类列表
-   * GET /admin/categories
-   */
-  router.get("/", async function (req, res) {
-    try {
-      const query = req.query;
+router.get("/", async function (req, res) {
+  try {
+    const query = req.query;
 
-      const condition = {
-        where: {},
-        order: [
-          ["rank", "ASC"],
-          ["id", "ASC"],
-        ],
+    const condition = {
+      where: {},
+      order: [
+        ["rank", "ASC"],
+        ["id", "ASC"],
+      ],
+    };
+
+    if (query.name) {
+      condition.where.name = {
+        [Op.like]: `%${query.name}%`,
       };
-
-      if (query.name) {
-        condition.where.name = {
-          [Op.like]: `%${query.name}%`,
-        };
-      }
-
-      const categories = await Category.findAll(condition);
-      success(res, "查询分类列表成功。", {
-        categories: categories,
-      });
-    } catch (error) {
-      failure(res, error);
     }
-  });
+
+    const categories = await Category.findAll(condition);
+    success(res, "查询分类列表成功。", {
+      categories: categories,
+    });
+  } catch (error) {
+    failure(res, error);
+  }
 });
 
 /**
@@ -69,6 +64,8 @@ router.post("/", async function (req, res, next) {
     const body = filterBody(req);
     // 插入数据库
     const category = await Category.create(body);
+    // 清除缓存
+    await clearCache();
     // 响应数据
     success(res, "创建分类成功", { category }, 201);
   } catch (error) {
@@ -90,6 +87,8 @@ router.delete("/:id", async function (req, res, next) {
     }
     // 删除分类
     await category.destroy();
+    // 清除缓存
+    await clearCache(category);
     // 响应数据
     success(res, "删除分类成功");
   } catch (error) {
@@ -107,6 +106,8 @@ router.put("/:id", async function (req, res, next) {
     // 白名单过滤
     const body = filterBody(req);
     await category.update(body);
+    // 清除缓存
+    await clearCache(category);
     // 相应数据
     res.json({
       status: true,
@@ -144,6 +145,19 @@ function filterBody(req) {
     name: req.body.name,
     rank: req.body.rank,
   };
+}
+
+/**
+ * 清除缓存
+ * @param category
+ * @returns {Promise<void>}
+ */
+async function clearCache(category = null) {
+  await delKey("categories");
+
+  if (category) {
+    await delKey(`category:${category.id}`);
+  }
 }
 
 module.exports = router;

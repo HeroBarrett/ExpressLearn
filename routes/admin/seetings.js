@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const { Setting } = require("../../models");
 const { success, failure } = require("../../utils/responses");
-const { NotFound } = require("http-errors")
-
+const { NotFound } = require("http-errors");
+const { delKey, flushAll } = require("../../utils/redis");
 
 /**
  * 查询系统设置详情
@@ -32,6 +32,8 @@ router.put("/", async function (req, res, next) {
     // 白名单过滤
     const body = filterBody(req);
     await setting.update(body);
+    // 删除缓存
+    await delKey("setting");
     // 相应数据
     res.json({
       status: true,
@@ -40,6 +42,18 @@ router.put("/", async function (req, res, next) {
         setting,
       },
     });
+  } catch (error) {
+    failure(res, error);
+  }
+});
+
+/**
+ * 清除所有缓存
+ */
+router.get("/flush-all", async function (req, res) {
+  try {
+    await flushAll();
+    success(res, "清除所有缓存成功。");
   } catch (error) {
     failure(res, error);
   }

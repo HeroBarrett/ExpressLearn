@@ -3,7 +3,8 @@ const router = express.Router();
 const { Course, Category, User, Chapter } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
-const { NotFound, Conflict } = require("http-errors")
+const { NotFound, Conflict } = require("http-errors");
+const { getKeysByPattern, delKey } = require("../../utils/redis");
 
 /**
  * 获取所有课程列表
@@ -97,6 +98,8 @@ router.post("/", async function (req, res, next) {
     body.userId = req.user.id;
     // 插入数据库
     const course = await Course.create(body);
+    // 清除缓存
+    await clearCache();
     // 响应数据
     success(res, "创建课程成功", { course }, 201);
   } catch (error) {
@@ -117,6 +120,8 @@ router.delete("/:id", async function (req, res, next) {
       throw new Conflict("该课程下存在章节，不能删除");
     }
     await course.destroy();
+    // 清除缓存
+    await clearCache(course);
     success(res, "删除课程成功");
   } catch (error) {
     failure(res, error);
@@ -133,14 +138,10 @@ router.put("/:id", async function (req, res, next) {
     // 白名单过滤
     const body = filterBody(req);
     await course.update(body);
+    // 清除缓存
+    await clearCache(course);
     // 相应数据
-    res.json({
-      status: true,
-      message: "更新课程成功",
-      data: {
-        course,
-      },
-    });
+    success(res, "更新课程成功", { course });
   } catch (error) {
     failure(res, error);
   }
@@ -169,7 +170,7 @@ function getCondition() {
         model: Chapter,
         as: "chapters",
         attributes: ["id", "title"],
-      }
+      },
     ],
   };
 }
@@ -203,6 +204,22 @@ function filterBody(req) {
     introductory: req.body.introductory,
     content: req.body.content,
   };
+}
+
+/**
+ * 清除缓存
+ * @param course
+ * @returns {Promise<void>}
+ */
+async function clearCache(course = null) {
+  let keys = await getKeysByPattern("courses:*");
+  if (keys.length !== 0) {
+    await delKey(keys);
+  }
+
+  if (course) {
+    await delKey(`course:${course.id}`);
+  }
 }
 
 module.exports = router;

@@ -4,6 +4,7 @@ const { Article } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
 const { NotFound } = require("http-errors");
+const { getKeysByPattern, delKey } = require("../../utils/redis");
 
 /**
  * 获取所有文章列表
@@ -94,6 +95,31 @@ router.post("/", async function (req, res, next) {
 });
 
 /**
+ * 更新文章
+ * PUT /admin/articles/:id
+ */
+router.put("/:id", async function (req, res, next) {
+  try {
+    const article = await getArticle(req);
+    // 白名单过滤
+    const body = filterBody(req);
+    await article.update(body);
+    // 清除缓存
+    await clearCache(article.id);
+    // 相应数据
+    res.json({
+      status: true,
+      message: "更新文章成功",
+      data: {
+        article,
+      },
+    });
+  } catch (error) {
+    failure(res, error);
+  }
+});
+
+/**
  * 删除到回收站
  * POST /admin/articles/delete
  */
@@ -102,6 +128,8 @@ router.post("/delete", async function (req, res) {
     const { id } = req.body;
 
     await Article.destroy({ where: { id: id } });
+    // 清除缓存
+    await clearCache(id);
     success(res, "已删除到回收站。");
   } catch (error) {
     failure(res, error);
@@ -117,6 +145,8 @@ router.post("/restore", async function (req, res) {
     const { id } = req.body;
 
     await Article.restore({ where: { id: id } });
+    // 清除缓存
+    await clearCache(id);
     success(res, "已恢复成功。");
   } catch (error) {
     failure(res, error);
@@ -136,29 +166,6 @@ router.post("/force_delete", async function (req, res) {
       force: true,
     });
     success(res, "已彻底删除。");
-  } catch (error) {
-    failure(res, error);
-  }
-});
-
-/**
- * 更新文章
- * PUT /admin/articles/:id
- */
-router.put("/:id", async function (req, res, next) {
-  try {
-    const article = await getArticle(req);
-    // 白名单过滤
-    const body = filterBody(req);
-    await article.update(body);
-    // 相应数据
-    res.json({
-      status: true,
-      message: "更新文章成功",
-      data: {
-        article,
-      },
-    });
   } catch (error) {
     failure(res, error);
   }
@@ -188,6 +195,25 @@ function filterBody(req) {
     title: req.body.title,
     content: req.body.content,
   };
+}
+
+/**
+ * 清除缓存
+ * @returns {Promise<void>}
+ */
+async function clearCache(id = null) {
+  // 清除所有文章列表缓存
+  const keys = await getKeysByPattern("articles:*");
+
+  if (keys.length !== 0) {
+    await delKey(keys);
+  }
+  // 清除当前文章缓存
+  if (id) {
+    // 如果是数组，则遍历
+    const keys = Array.isArray(id) ? id.map((item) => `article:${item}`) : `article:${id}`;
+    await delKey(keys);
+  }
 }
 
 module.exports = router;
