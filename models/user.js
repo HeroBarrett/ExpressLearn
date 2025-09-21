@@ -113,6 +113,7 @@ module.exports = (sequelize, DataTypes) => {
           isUrl: { msg: "图片地址不正确。" },
         },
       },
+      membershipExpiredAt: DataTypes.DATE,
     },
     {
       sequelize,
