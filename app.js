@@ -21,6 +21,7 @@ var searchRouter = require("./routes/search");
 var authRouter = require("./routes/auth");
 var likesRouter = require("./routes/likes");
 var uploadsRouter = require("./routes/uploads");
+var captchaRouter = require("./routes/captcha");
 
 // 后台路由文件
 var adminArticlesRouter = require("./routes/admin/articles");
@@ -57,6 +58,7 @@ app.use("/auth", authRouter);
 app.use("/users", userAuth, usersRouter);
 app.use("/likes", userAuth, likesRouter);
 app.use("/uploads", userAuth, uploadsRouter);
+app.use("/captcha", captchaRouter);
 
 // 后台路由配置
 app.use("/admin/articles", adminAuth, adminArticlesRouter);
