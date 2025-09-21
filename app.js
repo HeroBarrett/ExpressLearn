@@ -2,9 +2,17 @@ var express = require("express");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
-const cors = require("cors")
+const cors = require("cors");
 
 require("dotenv").config();
+require("dotenv").config();
+
+// 启动邮件消费者
+const { mailConsumer } = require("./utils/rabbit-mq");
+(async () => {
+  await mailConsumer();
+  console.log("邮件消费者已启动");
+})();
 
 const adminAuth = require("./middlewares/admin-auth");
 const userAuth = require("./middlewares/user-auth");
@@ -38,7 +46,7 @@ var adminAuthRouter = require("./routes/admin/auth");
 
 var app = express();
 
-app.use(cors())
+app.use(cors());
 
 app.use(logger("dev"));
 app.use(express.json());
