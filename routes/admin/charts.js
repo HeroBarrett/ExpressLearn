@@ -4,6 +4,7 @@ const { sequelize, User } = require("../../models");
 const { Op } = require("sequelize");
 const { success, failure } = require("../../utils/responses");
 const { NotFound } = require("http-errors");
+const { initOrderStream, broadcastOrderCount } = require("../../streams/count-order");
 
 /**
  * 统计用户性别
@@ -29,6 +30,10 @@ router.get("/sex", async function (req, res) {
   }
 });
 
+/**
+ * 统计每月注册用户数量
+ * GET /admin/charts/user
+ */
 router.get("/user", async (req, res, next) => {
   try {
     const count = await User.count();
@@ -47,6 +52,21 @@ router.get("/user", async (req, res, next) => {
     });
 
     success(res, "查询每月注册用户数量成功", { data });
+  } catch (error) {
+    failure(res, error);
+  }
+});
+
+/**
+ * SSE 统计每个月订单数量
+ * GET /admin/charts/stream_order
+ */
+router.get("/stream_order", async (req, res) => {
+  try {
+    // 初始化连接信息
+    initOrderStream(res, req);
+    // 推送订单统计数据
+    await broadcastOrderCount();
   } catch (error) {
     failure(res, error);
   }
